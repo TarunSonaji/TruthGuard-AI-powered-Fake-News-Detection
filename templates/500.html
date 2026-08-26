@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Server Error – TruthGuard{% endblock %}
+{% block content %}
+<section class="container my-5 text-center">
+  <i class="bi bi-exclamation-octagon" style="font-size: 4rem;"></i>
+  <h2 class="mt-3">500 — Something Went Wrong</h2>
+  <p class="text-muted">An unexpected error occurred on our end. Please try again.</p>
+  <a href="{{ url_for('index') }}" class="btn tg-btn-primary"><i class="bi bi-house-door"></i> Back Home</a>
+</section>
+{% endblock %}

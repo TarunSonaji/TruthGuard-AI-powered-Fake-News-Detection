@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}TruthGuard – Analyze News{% endblock %}
+
+{% block content %}
+<section class="tg-hero">
+  <div class="container text-center">
+    <span class="tg-badge"><i class="bi bi-stars"></i> AI-Powered · NLP · Machine Learning</span>
+    <h1 class="tg-hero-title">Detect Fake News <span class="tg-gradient-text">Instantly</span></h1>
+    <p class="tg-hero-sub">
+      Paste any headline or article below. TruthGuard's ML engine analyzes the language
+      patterns and tells you whether it's likely <strong>Real</strong> or <strong>Fake</strong> —
+      complete with a confidence score and highlighted suspicious phrases.
+    </p>
+    {% if not model_ready %}
+    <div class="alert alert-warning d-inline-block mt-3">
+      <i class="bi bi-exclamation-triangle"></i>
+      No trained model found yet. Run <code>python train_model.py</code> on the server first.
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="container tg-analyze-section">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+      <div class="tg-glass-card p-4 p-md-5">
+
+        {% if not current_user.is_authenticated %}
+        <div class="alert alert-info">
+          <i class="bi bi-lock"></i>
+          Please <a href="{{ url_for('login') }}">log in</a> or
+          <a href="{{ url_for('register') }}">create a free account</a> to analyze articles
+          and save your prediction history.
+        </div>
+        {% endif %}
+
+        <form id="analyzeForm" autocomplete="off">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <label for="articleText" class="form-label fw-semibold mb-0">
+              <i class="bi bi-file-earmark-text"></i> News Article / Headline
+            </label>
+            <span id="charCounter" class="tg-char-counter">0 / 20000</span>
+          </div>
+          <textarea
+            id="articleText"
+            class="form-control tg-textarea"
+            rows="9"
+            placeholder="Paste a news headline or full article text here..."
+            maxlength="20000"
+            {% if not current_user.is_authenticated %}disabled{% endif %}
+          ></textarea>
+
+          <div class="d-flex flex-wrap gap-2 mt-3">
+            <button type="submit" id="analyzeBtn" class="btn tg-btn-primary flex-grow-1 flex-md-grow-0"
+              {% if not current_user.is_authenticated %}disabled{% endif %}>
+              <i class="bi bi-search"></i> Analyze News
+            </button>
+            <button type="button" id="clearBtn" class="btn tg-btn-outline">
+              <i class="bi bi-x-circle"></i> Clear
+            </button>
+          </div>
+
+          <div id="progressWrap" class="mt-3 d-none">
+            <div class="progress tg-progress">
+              <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+            </div>
+            <p class="text-center small mt-1 mb-0 tg-typing" id="loadingText">Analyzing article...</p>
+          </div>
+        </form>
+
+        <!-- ===================== RESULT CARD ===================== -->
+        <div id="resultCard" class="tg-result-card mt-4 d-none">
+          <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+            <div>
+              <h4 class="mb-1">
+                <span id="resultIcon"></span>
+                <span id="resultLabel"></span>
+              </h4>
+              <p class="text-muted mb-0 small" id="resultTimestamp"></p>
+            </div>
+            <div class="text-end">
+              <div id="confidenceMeter" class="tg-confidence-meter"></div>
+              <p class="mb-0 small"><span id="confidenceValue"></span>% confidence</p>
+            </div>
+          </div>
+
+          <div id="suspiciousWrap" class="mt-3 d-none">
+            <p class="fw-semibold mb-1"><i class="bi bi-exclamation-diamond"></i> Suspicious words/phrases detected:</p>
+            <div id="suspiciousWords" class="d-flex flex-wrap gap-2"></div>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2 mt-3">
+            <button class="btn tg-btn-outline btn-sm" id="copyResultBtn"><i class="bi bi-clipboard"></i> Copy Result</button>
+            <button class="btn tg-btn-outline btn-sm" id="downloadResultBtn"><i class="bi bi-file-earmark-pdf"></i> Download Report</button>
+            {% if current_user.is_authenticated %}
+            <a class="btn tg-btn-outline btn-sm" href="{{ url_for('history') }}"><i class="bi bi-clock-history"></i> View History</a>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FEATURES ===================== -->
+<section class="container my-5">
+  <div class="row g-4 text-center">
+    <div class="col-md-4">
+      <div class="tg-feature-card">
+        <i class="bi bi-cpu tg-feature-icon"></i>
+        <h5>ML-Powered Analysis</h5>
+        <p class="text-muted small mb-0">Trained on real-world news datasets using TF-IDF + multiple classifiers, automatically selecting the best performer.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="tg-feature-card">
+        <i class="bi bi-graph-up-arrow tg-feature-icon"></i>
+        <h5>Confidence Scoring</h5>
+        <p class="text-muted small mb-0">Every prediction comes with a transparent confidence percentage so you know how certain the model is.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="tg-feature-card">
+        <i class="bi bi-clock-history tg-feature-icon"></i>
+        <h5>Prediction History</h5>
+        <p class="text-muted small mb-0">Every analysis is saved to your account so you can revisit, search, or export your past checks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  window.TG_AUTHENTICATED = {{ 'true' if current_user.is_authenticated else 'false' }};
+</script>
+{% endblock %}

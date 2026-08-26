@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Prediction History – TruthGuard{% endblock %}
+
+{% block content %}
+<section class="container my-5">
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+    <div>
+      <h2 class="mb-1"><i class="bi bi-clock-history"></i> Prediction History</h2>
+      <p class="text-muted mb-0">All the articles you've analyzed with TruthGuard.</p>
+    </div>
+    <a href="{{ url_for('export_history_csv') }}" class="btn tg-btn-outline">
+      <i class="bi bi-download"></i> Export CSV
+    </a>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="tg-stat-card">
+        <span class="tg-stat-value">{{ total }}</span>
+        <span class="tg-stat-label">Total Checked</span>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="tg-stat-card tg-stat-fake">
+        <span class="tg-stat-value">{{ fake_count }}</span>
+        <span class="tg-stat-label">Flagged Fake</span>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="tg-stat-card tg-stat-real">
+        <span class="tg-stat-value">{{ real_count }}</span>
+        <span class="tg-stat-label">Marked Real</span>
+      </div>
+    </div>
+  </div>
+
+  <form method="GET" action="{{ url_for('history') }}" class="mb-4">
+    <div class="input-group">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" name="q" class="form-control tg-input" placeholder="Search your history..." value="{{ search_query }}">
+      <button class="btn tg-btn-primary" type="submit">Search</button>
+      {% if search_query %}
+      <a class="btn tg-btn-outline" href="{{ url_for('history') }}">Clear</a>
+      {% endif %}
+    </div>
+  </form>
+
+  {% if predictions %}
+  <div class="tg-history-list">
+    {% for p in predictions %}
+    <div class="tg-history-item">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+        <span class="badge {{ 'tg-badge-fake' if p.prediction == 'Fake' else 'tg-badge-real' }}">
+          <i class="bi {{ 'bi-x-octagon' if p.prediction == 'Fake' else 'bi-check-circle' }}"></i>
+          {{ p.prediction }}
+        </span>
+        <span class="text-muted small"><i class="bi bi-calendar3"></i> {{ p.timestamp.strftime('%b %d, %Y %H:%M') }}</span>
+      </div>
+      <p class="tg-history-text mt-2 mb-2">{{ p.article[:280] }}{% if p.article|length > 280 %}...{% endif %}</p>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="tg-mini-bar">
+          <div class="tg-mini-bar-fill" style="width: {{ p.confidence }}%;"></div>
+        </div>
+        <span class="small fw-semibold ms-2">{{ p.confidence }}%</span>
+      </div>
+      {% if p.suspicious_words %}
+      <p class="small text-muted mt-2 mb-0"><i class="bi bi-flag"></i> Suspicious: {{ p.suspicious_words }}</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center py-5">
+    <i class="bi bi-inbox tg-feature-icon"></i>
+    <p class="text-muted mt-2">
+      {% if search_query %}No results match "{{ search_query }}".{% else %}You haven't analyzed any articles yet.{% endif %}
+    </p>
+    <a href="{{ url_for('index') }}" class="btn tg-btn-primary mt-2"><i class="bi bi-search"></i> Analyze Your First Article</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}TruthGuard – AI Powered Fake News Detection{% endblock %}</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<!-- ===================== NAVBAR ===================== -->
+<nav class="navbar navbar-expand-lg tg-navbar sticky-top">
+  <div class="container">
+    <a class="navbar-brand tg-brand" href="{{ url_for('index') }}">
+      <i class="bi bi-shield-check"></i> TruthGuard
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}"><i class="bi bi-house-door"></i> Home</a></li>
+        {% if current_user.is_authenticated %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('history') }}"><i class="bi bi-clock-history"></i> History</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('profile') }}"><i class="bi bi-person-circle"></i> Profile</a></li>
+        {% endif %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}"><i class="bi bi-info-circle"></i> About</a></li>
+
+        <li class="nav-item">
+          <button id="themeToggle" class="btn tg-theme-btn" title="Toggle dark mode">
+            <i class="bi bi-moon-stars-fill"></i>
+          </button>
+        </li>
+
+        {% if current_user.is_authenticated %}
+        <li class="nav-item">
+          <span class="nav-link tg-username"><i class="bi bi-person-fill"></i> {{ current_user.username }}</span>
+        </li>
+        <li class="nav-item">
+          <a class="btn tg-btn-outline btn-sm" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item"><a class="btn tg-btn-outline btn-sm" href="{{ url_for('login') }}">Login</a></li>
+        <li class="nav-item"><a class="btn tg-btn-primary btn-sm" href="{{ url_for('register') }}">Sign Up</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= FLASH MESSAGES -> TOASTS ================= -->
+<div class="toast-container position-fixed top-0 end-0 p-3" id="flashToastContainer" style="z-index: 1080;">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div class="toast align-items-center text-bg-{{ 'danger' if category=='danger' else category }} border-0 show tg-toast" role="alert">
+      <div class="d-flex">
+        <div class="toast-body">{{ message }}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+    {% endfor %}
+  {% endwith %}
+</div>
+<div class="toast-container position-fixed top-0 end-0 p-3" id="jsToastContainer" style="z-index: 1080;"></div>
+
+<!-- ===================== PAGE CONTENT ===================== -->
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="tg-footer text-center py-4 mt-5">
+  <div class="container">
+    <p class="mb-1"><i class="bi bi-shield-check"></i> <strong>TruthGuard</strong> — AI Powered Fake News Detection System</p>
+    <p class="mb-0 small opacity-75">Built with Flask, Scikit-learn &amp; NLTK · For educational purposes only</p>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Login – TruthGuard{% endblock %}
+
+{% block content %}
+<section class="tg-auth-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="tg-glass-card p-4 p-md-5">
+          <div class="text-center mb-4">
+            <i class="bi bi-shield-lock tg-feature-icon"></i>
+            <h3 class="mt-2">Welcome Back</h3>
+            <p class="text-muted small">Log in to analyze news and view your history.</p>
+          </div>
+
+          <form method="POST" action="{{ url_for('login') }}" novalidate>
+            <div class="mb-3">
+              <label class="form-label">Username or Email</label>
+              <input type="text" name="username" class="form-control tg-input" required autofocus>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input type="password" name="password" class="form-control tg-input" required>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" name="remember" id="remember">
+              <label class="form-check-label small" for="remember">Remember me</label>
+            </div>
+            <button type="submit" class="btn tg-btn-primary w-100"><i class="bi bi-box-arrow-in-right"></i> Login</button>
+          </form>
+
+          <p class="text-center mt-4 mb-0 small">
+            Don't have an account? <a href="{{ url_for('register') }}">Sign up</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

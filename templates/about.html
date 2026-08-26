@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}About – TruthGuard{% endblock %}
+
+{% block content %}
+<section class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+
+      <div class="tg-glass-card p-4 p-md-5 mb-4">
+        <h2><i class="bi bi-shield-check"></i> About TruthGuard</h2>
+        <p class="text-muted">
+          TruthGuard is an AI-powered fake news detection system built with Flask and
+          Scikit-learn. It uses Natural Language Processing (TF-IDF) combined with
+          classical machine learning classifiers to estimate whether a piece of news
+          text is likely <strong>Real</strong> or <strong>Fake</strong>, based on
+          patterns learned from a labeled training dataset.
+        </p>
+        <p class="text-muted mb-0">
+          <strong>Disclaimer:</strong> TruthGuard is an educational project. Its
+          predictions reflect statistical patterns in its training data and should
+          never be treated as a definitive fact-check. Always verify important news
+          through trusted, independent sources.
+        </p>
+      </div>
+
+      {% if metrics %}
+      <div class="tg-glass-card p-4 p-md-5 mb-4">
+        <h4><i class="bi bi-trophy"></i> Current Model: {{ metrics.best_model }}</h4>
+        <p class="text-muted small">Trained on {{ metrics.trained_on_rows }} articles.</p>
+
+        <div class="table-responsive mt-3">
+          <table class="table tg-table align-middle">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Accuracy</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>F1 Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in metrics.results %}
+              <tr class="{{ 'table-success' if r.model == metrics.best_model else '' }}">
+                <td>{{ r.model }} {% if r.model == metrics.best_model %}<i class="bi bi-star-fill text-warning"></i>{% endif %}</td>
+                <td>{{ r.accuracy }}%</td>
+                <td>{{ r.precision }}%</td>
+                <td>{{ r.recall }}%</td>
+                <td>{{ r.f1_score }}%</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% else %}
+      <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle"></i> No model metrics available yet. Run <code>python train_model.py</code>.
+      </div>
+      {% endif %}
+
+      <div class="tg-glass-card p-4 p-md-5">
+        <h4><i class="bi bi-gear"></i> Tech Stack</h4>
+        <div class="row g-3 mt-1">
+          <div class="col-6 col-md-3"><span class="badge tg-tech-badge"><i class="bi bi-server"></i> Flask</span></div>
+          <div class="col-6 col-md-3"><span class="badge tg-tech-badge"><i class="bi bi-diagram-3"></i> Scikit-learn</span></div>
+          <div class="col-6 col-md-3"><span class="badge tg-tech-badge"><i class="bi bi-chat-dots"></i> NLTK</span></div>
+          <div class="col-6 col-md-3"><span class="badge tg-tech-badge"><i class="bi bi-database"></i> SQLAlchemy</span></div>
+          <div class="col-6 col-md-3"><span class="badge tg-tech-badge"><i class="bi bi-bootstrap"></i> Bootstrap 5</span></div>
+          <div class="col-6 col-md-3"><span class="badge tg-tech-badge"><i class="bi bi-shield-lock"></i> Flask-Login</span></div>
+          <div class="col-6 col-md-3"><span class="badge tg-tech-badge"><i class="bi bi-filetype-py"></i> Pandas / NumPy</span></div>
+          <div class="col-6 col-md-3"><span class="badge tg-tech-badge"><i class="bi bi-box-seam"></i> Joblib</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

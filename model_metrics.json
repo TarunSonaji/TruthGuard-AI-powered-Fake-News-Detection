@@ -1,0 +1,78 @@
+{
+  "best_model": "Passive Aggressive Classifier",
+  "trained_on_rows": 1200,
+  "results": [
+    {
+      "model": "Passive Aggressive Classifier",
+      "accuracy": 100.0,
+      "precision": 100.0,
+      "recall": 100.0,
+      "f1_score": 100.0,
+      "confusion_matrix": [
+        [
+          120,
+          0
+        ],
+        [
+          0,
+          120
+        ]
+      ],
+      "train_time_seconds": 0.02
+    },
+    {
+      "model": "Logistic Regression",
+      "accuracy": 100.0,
+      "precision": 100.0,
+      "recall": 100.0,
+      "f1_score": 100.0,
+      "confusion_matrix": [
+        [
+          120,
+          0
+        ],
+        [
+          0,
+          120
+        ]
+      ],
+      "train_time_seconds": 0.01
+    },
+    {
+      "model": "Multinomial Naive Bayes",
+      "accuracy": 100.0,
+      "precision": 100.0,
+      "recall": 100.0,
+      "f1_score": 100.0,
+      "confusion_matrix": [
+        [
+          120,
+          0
+        ],
+        [
+          0,
+          120
+        ]
+      ],
+      "train_time_seconds": 0.01
+    },
+    {
+      "model": "Linear SVM",
+      "accuracy": 100.0,
+      "precision": 100.0,
+      "recall": 100.0,
+      "f1_score": 100.0,
+      "confusion_matrix": [
+        [
+          120,
+          0
+        ],
+        [
+          0,
+          120
+        ]
+      ],
+      "train_time_seconds": 0.01
+    }
+  ]
+}

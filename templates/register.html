@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Sign Up – TruthGuard{% endblock %}
+
+{% block content %}
+<section class="tg-auth-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="tg-glass-card p-4 p-md-5">
+          <div class="text-center mb-4">
+            <i class="bi bi-person-plus tg-feature-icon"></i>
+            <h3 class="mt-2">Create Your Account</h3>
+            <p class="text-muted small">Join TruthGuard to start detecting fake news.</p>
+          </div>
+
+          <form method="POST" action="{{ url_for('register') }}" id="registerForm" novalidate>
+            <div class="mb-3">
+              <label class="form-label">Username</label>
+              <input type="text" name="username" class="form-control tg-input" required minlength="3" autofocus>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" name="email" class="form-control tg-input" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input type="password" name="password" id="password" class="form-control tg-input" required minlength="6">
+              <div class="form-text">At least 6 characters.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Confirm Password</label>
+              <input type="password" name="confirm_password" id="confirmPassword" class="form-control tg-input" required minlength="6">
+            </div>
+            <button type="submit" class="btn tg-btn-primary w-100"><i class="bi bi-check-circle"></i> Create Account</button>
+          </form>
+
+          <p class="text-center mt-4 mb-0 small">
+            Already have an account? <a href="{{ url_for('login') }}">Log in</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.getElementById('registerForm').addEventListener('submit', function (e) {
+  const pw = document.getElementById('password').value;
+  const cpw = document.getElementById('confirmPassword').value;
+  if (pw !== cpw) {
+    e.preventDefault();
+    showToast('Passwords do not match.', 'danger');
+  }
+});
+</script>
+{% endblock %}
