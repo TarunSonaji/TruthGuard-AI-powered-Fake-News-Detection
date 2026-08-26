@@ -9,6 +9,12 @@ user accounts, prediction history, and a modern glassmorphism UI.
 > from training data and are not a substitute for professional fact-checking.
 
 ---
+## 🚀 Live Demo
+
+👉 [Try TruthGuard Live](https://truthguard-ai-powered-fake-news-detection.onrender.com)
+
+## 🚀 Git_Repo
+👉 [View Git_Repo Code](https://github.com/TarunSonaji/TruthGuard-AI-powerded-Fake-News-Detection)
 
 ## 1. Project Overview
 
